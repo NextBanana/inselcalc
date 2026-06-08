@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kampfrechner — Kampfinsel</title>
+  <meta name="description" content="Kampfinsel Kampfrechner — Berechne Angriff, Verteidigung und Beute.">
+  <link rel="stylesheet" href="kampfrechner.css">
+</head>
+<body>
+
+<!-- ── Language switch ── -->
+<div class="lang-bar">
+  <button class="lang-btn active" data-lang="de">🇩🇪 DE</button>
+  <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+</div>
+
+<!-- ═══════════ PAGE LAYOUT ═══════════ -->
+<div class="page-layout">
+  <main class="container">
+
+    <h1 data-i18n="h1">Kampfrechner</h1>
+
+    <!-- ── Live Summary ── -->
+    <div class="resources-bar" id="summary-bar">
+      <div class="resource">
+        <span class="resource-icon">⚔️</span>
+        <span class="resource-label" data-i18n="attack">Angriff</span>&nbsp;
+        <span class="resource-value atk-val" id="bar-atk">0</span>
+      </div>
+      <span class="resource-divider">·</span>
+      <div class="resource">
+        <span class="resource-icon">🛡️</span>
+        <span class="resource-label" data-i18n="defense">Verteidigung</span>&nbsp;
+        <span class="resource-value def-val" id="bar-def">0</span>
+      </div>
+      <span class="resource-divider">·</span>
+      <div class="resource">
+        <span class="resource-icon">⚓</span>
+        <span class="resource-label" data-i18n="capacity">Kapazität</span>&nbsp;
+        <span class="resource-value" id="bar-cap" style="color:var(--c-text-muted)">0 / 0</span>
+      </div>
+      <span class="resource-divider">·</span>
+      <div class="resource">
+        <span class="resource-icon">🛶</span>
+        <span class="resource-label" data-i18n="transport">Transport</span>&nbsp;
+        <span class="resource-value" id="bar-transport" style="color:var(--c-text-muted)">0</span>
+      </div>
+    </div>
+
+    <!-- ── Outcome banner ── -->
+    <div id="outcome-banner" style="display:none"></div>
+
+    <!-- ── Capacity warning ── -->
+    <div class="warning" id="cap-warning" style="display:none">
+      ⚠️ <span id="cap-warning-text"></span>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         BATTLE COLUMNS
+         ══════════════════════════════════════ -->
+    <div class="battle-columns">
+
+      <!-- ── ANGREIFER ── -->
+      <div>
+        <h2 data-i18n="attacker">⚔️ Angreifer</h2>
+
+        <div class="building-grid">
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-steinwerfer">🪨 Steinwerfer</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 5</span>
+                <span class="stat-def">🛡 16</span>
+                <span class="stat-cap">15 Res.</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-steinwerfer" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-steinwerfer-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-steinwerfer-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-speertreaeger">🗡️ Speerträger</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 25</span>
+                <span class="stat-def">🛡 33</span>
+                <span class="stat-cap">25 Res.</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-speertreaeger" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-speertreaeger-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-speertreaeger-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-bogenschuetze">🏹 Bogenschütze</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 47</span>
+                <span class="stat-def">🛡 18</span>
+                <span class="stat-cap">10 Res.</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-bogenschuetze" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-bogenschuetze-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-bogenschuetze-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-katapult">💥 Katapult</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 10</span>
+                <span class="stat-def">🛡 13</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-katapult" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-katapult-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-katapult-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-kks">⛵ Kl. Kriegsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 20</span>
+                <span class="stat-def">🛡 30</span>
+                <span class="stat-cap" data-i18n="slots5">5 Plätze</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-kks" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-kks-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-kks-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-gks">🚢 Gr. Kriegsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 60</span>
+                <span class="stat-def">🛡 80</span>
+                <span class="stat-cap" data-i18n="slots10">10 Plätze</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-gks" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-gks-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-gks-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-khs">🛶 Kl. Handelsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 2</span>
+                <span class="stat-def">🛡 5</span>
+                <span class="stat-cap" data-i18n="res500">500 Res.</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-khs" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-khs-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-khs-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-ghs">🛥️ Gr. Handelsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 5</span>
+                <span class="stat-def">🛡 10</span>
+                <span class="stat-cap" data-i18n="res2000">2000 Res.</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-ghs" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-ghs-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-ghs-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-kolonisierungsschiff">⛴️ Kolonisierungsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 30</span>
+                <span class="stat-def">🛡 50</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="a-kolonisierungsschiff" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="a-kolonisierungsschiff-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="a-kolonisierungsschiff-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+        </div><!-- /attacker-grid -->
+
+        <!-- Capacity bar -->
+        <div class="construction-active" style="margin-top:10px;">
+          <h2 data-i18n="troopCapacity">⚓ Truppenkapazität</h2>
+          <div class="timer-wrapper">
+            <div class="timer-text">
+              <span id="cap-label-troops">0</span>
+              <span id="cap-label-slots">0</span>
+            </div>
+            <div class="timer-bar">
+              <div class="timer-bar-fill" id="cap-bar" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="timer-wrapper" style="margin-top:8px;">
+            <div class="timer-text">
+              <span data-i18n="transportCapacity">🛶 Transportkapazität</span>
+              <span id="cap-label-transport">0</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /attacker col -->
+
+      <!-- ── VERTEIDIGER ── -->
+      <div>
+        <h2 data-i18n="defender">🛡️ Verteidiger</h2>
+
+        <div class="building-grid">
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-steinwerfer">🪨 Steinwerfer</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 5</span>
+                <span class="stat-def">🛡 16</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-steinwerfer" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-steinwerfer-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-steinwerfer-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-speertreaeger">🗡️ Speerträger</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 25</span>
+                <span class="stat-def">🛡 33</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-speertreaeger" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-speertreaeger-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-speertreaeger-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-bogenschuetze">🏹 Bogenschütze</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 47</span>
+                <span class="stat-def">🛡 18</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-bogenschuetze" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-bogenschuetze-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-bogenschuetze-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ready">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-katapult">💥 Katapult</span>
+              <span class="building-card-level" data-i18n="landUnit">Landtruppe</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 10</span>
+                <span class="stat-def">🛡 13</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-katapult" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-katapult-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-katapult-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-kks">⛵ Kl. Kriegsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 20</span>
+                <span class="stat-def">🛡 30</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-kks" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-kks-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-kks-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-gks">🚢 Gr. Kriegsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 60</span>
+                <span class="stat-def">🛡 80</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-gks" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-gks-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-gks-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-khs">🛶 Kl. Handelsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 2</span>
+                <span class="stat-def">🛡 5</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-khs" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-khs-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-khs-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-ghs">🛥️ Gr. Handelsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 5</span>
+                <span class="stat-def">🛡 10</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-ghs" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-ghs-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-ghs-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="building-card building-card--ship">
+            <div class="building-card-header">
+              <span class="building-card-name" data-i18n="unit-kolonisierungsschiff">⛴️ Kolonisierungsschiff</span>
+              <span class="building-card-level" data-i18n="fleet">Flotte</span>
+            </div>
+            <div class="building-card-body">
+              <div class="building-card-cost">
+                <span class="stat-atk">⚔ 30</span>
+                <span class="stat-def">🛡 50</span>
+              </div>
+              <div class="building-card-action">
+                <input type="number" id="d-kolonisierungsschiff" min="0" value="0" inputmode="numeric">
+              </div>
+            </div>
+            <div class="upgrade-row">
+              <span class="upgrade-label">+⚔</span>
+              <input type="number" class="upgrade-input" id="d-kolonisierungsschiff-atk" min="0" value="0" inputmode="numeric">
+              <span class="upgrade-label">+🛡</span>
+              <input type="number" class="upgrade-input" id="d-kolonisierungsschiff-def" min="0" value="0" inputmode="numeric">
+            </div>
+          </div>
+
+        </div><!-- /defender-grid -->
+
+        <!-- Steinmauer -->
+        <div class="building-card building-card--constructing" style="margin-top:10px;">
+          <div class="building-card-header">
+            <span class="building-card-name" data-i18n="steinmauer">🧱 Steinmauer</span>
+            <span class="building-card-level wall-bonus-label" id="wall-bonus-label"></span>
+          </div>
+          <div class="building-card-body">
+            <div class="building-card-cost">
+              <span class="text-muted" style="font-size:0.82rem;">Stufe 0–20 · +100 🛡 / Stufe</span>
+            </div>
+            <div class="building-card-action" style="display:flex;align-items:center;gap:6px;">
+              <span class="upgrade-label" data-i18n="steinmauerLevel">Stufe</span>
+              <input type="number" id="d-steinmauer" min="0" max="20" value="0" inputmode="numeric" style="width:60px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Lagerhaus -->
+        <div class="building-card building-card--constructing" style="margin-top:10px;">
+          <div class="building-card-header">
+            <span class="building-card-name" data-i18n="lagerhaus">🏚️ Lagerhaus</span>
+            <span class="building-card-level" id="warehouse-protect-label"></span>
+          </div>
+          <div class="building-card-body">
+            <div class="building-card-cost">
+              <span class="text-muted" style="font-size:0.82rem;" data-i18n="lagerhausDesc">Stufe 0–30 · schützt Ressourcen</span>
+            </div>
+            <div class="building-card-action" style="display:flex;align-items:center;gap:6px;">
+              <span class="upgrade-label" data-i18n="lagerhausLevel">Stufe</span>
+              <input type="number" id="d-lagerhaus" min="0" max="30" value="0" inputmode="numeric" style="width:60px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Resources (defender only) -->
+        <div class="building-card" style="margin-top:10px; border-left: 3px solid var(--c-gold-border);">
+          <div class="building-card-header">
+            <span class="building-card-name" data-i18n="defResources">💰 Ressourcen des Verteidigers</span>
+          </div>
+          <div class="resource-input-row">
+            <div class="resource-input-label"><span>⚜</span> <span data-i18n="gold">Gold</span></div>
+            <input type="number" id="d-gold" min="0" value="0" inputmode="numeric">
+          </div>
+          <div class="resource-input-row">
+            <div class="resource-input-label"><span>🪨</span> <span data-i18n="stone">Silber</span></div>
+            <input type="number" id="d-silber" min="0" value="0" inputmode="numeric">
+          </div>
+          <div class="resource-input-row">
+            <div class="resource-input-label"><span>🪵</span> <span data-i18n="wood">Holz</span></div>
+            <input type="number" id="d-holz" min="0" value="0" inputmode="numeric">
+          </div>
+        </div>
+
+      </div><!-- /defender col -->
+
+    </div><!-- /battle-columns -->
+
+    <!-- ═══════════════════════════════════════
+         RESULT SECTION
+         ═══════════════════════════════════════ -->
+    <div class="result-section">
+      <h2 data-i18n="result">📊 Kampfergebnis</h2>
+      <div id="result-outcome"></div>
+      <div id="result-detail"></div>
+    </div>
+
+  </main>
+</div><!-- /page-layout -->
+
+<footer class="footer">
+  <span data-i18n="footerText">Kampfinsel Kampfrechner · Inoffizielles Tool</span> ·
+  <a href="https://kampfinsel.com/handbook" target="_blank" data-i18n="handbook">Handbuch</a> ·
+  <a href="https://github.com/m0kk4/kampfinsel-calculator" target="_blank" rel="noopener">
+    <img src="https://img.shields.io/github/stars/m0kk4/kampfinsel-calculator?style=social" alt="GitHub Stars" style="vertical-align:middle;">
+  </a>
+</footer>
+
+<script src="kampfrechner.js" defer></script>
+</body>
+</html>
