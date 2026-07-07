@@ -155,10 +155,10 @@ const T = {
 
 /* ─── Unit data ─── */
 const UNITS = {
-  steinwerfer:          { atk: 5,  def: 16, resCap: 15 },
-  speertreaeger:        { atk: 25, def: 33, resCap: 25 },
-  bogenschuetze:        { atk: 47, def: 18, resCap: 10 },
-  katapult:             { atk: 10, def: 13 },
+  steinwerfer:          { atk: 5,  def: 8, resCap: 15 },
+  speertreaeger:        { atk: 15, def: 25, resCap: 25 },
+  bogenschuetze:        { atk: 35, def: 10, resCap: 10 },
+  katapult:             { atk: 10, def: 5 },
   kks:                  { atk: 20, def: 30, troopCap: 5 },
   gks:                  { atk: 60, def: 80, troopCap: 10 },
   khs:                  { atk: 2,  def: 5,  resCap: 500 },
