@@ -37,7 +37,6 @@ const T = {
     forschungDescAtk:            'Wirkt automatisch auf die passende Einheit.',
     forschungSpeer:              'Speer (+Speerträger-Angriff)',
     forschungBogen:              'Bogen (+Bogenschütze-Angriff)',
-    forschungKatapult:           'Katapult (+Katapult-Angriff)',
     forschungHintAtk:            'Werte pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "35 (15+20)" → hier 20 eintragen.',
     forschungDescDef:            'Schild wirkt gleichmäßig auf die Verteidigung aller Einheiten.',
     forschungSchild:             'Schild (+Verteidigung aller Einheiten)',
@@ -52,7 +51,7 @@ const T = {
     hafen:                       '🚩 Hafen',
     hafenDesc:                   'Stufe 0–40 · Hafenverteidigung (Phase 2)',
     hafenStaerkeLabel:           'Hafen-Stärke',
-    hafenHint:                   'Wert unbekannt/geschätzt eintragen — genaue Formel (Level → Stärke) ist derzeit nicht bekannt.',
+    hafenHint:                   'Berechnet als Hafen-Stufe × 10 Punkte.',
     haupthaus:                   '🏛️ Haupthaus',
     haupthausDesc:               'Basis-Wert für Landkampf (Phase 3)',
     basisLabel:                  'Basis-Wert',
@@ -150,7 +149,6 @@ const T = {
     forschungDescAtk:            'Applies automatically to the matching unit.',
     forschungSpeer:              'Spear (+Spearman attack)',
     forschungBogen:              'Bow (+Archer attack)',
-    forschungKatapult:           'Catapult (+Catapult attack)',
     forschungHintAtk:            'Value per unit (not level) — e.g. read from the Military overview: "35 (15+20)" → enter 20 here.',
     forschungDescDef:            'Shield applies evenly to the defence of all units.',
     forschungSchild:             'Shield (+Defence of all units)',
@@ -165,7 +163,7 @@ const T = {
     hafen:                       '🚩 Harbour',
     hafenDesc:                   'Level 0–40 · harbour defence (Phase 2)',
     hafenStaerkeLabel:           'Harbour strength',
-    hafenHint:                   'Enter a known/estimated value — the exact level → strength formula is not yet known.',
+    hafenHint:                   'Calculated as harbour level × 10 points.',
     haupthaus:                   '🏛️ Town Hall',
     haupthausDesc:               'Base value for land combat (Phase 3)',
     basisLabel:                  'Base value',
@@ -288,21 +286,30 @@ function calculate() {
   ALL.forEach(u => { a[u] = num(`a-${u}`); d[u] = num(`d-${u}`); });
   const res = { gold: num('d-gold'), silber: num('d-silber'), holz: num('d-holz') };
 
-  /* Forschungs-Boni: wirken auf bestimmte Einheiten (siehe Handbuch/Militär-Screen)
-     - Speer  → nur Speerträger-Angriff (Angreifer)
-     - Bogen  → nur Bogenschütze-Angriff (Angreifer)
-     - Katapult → nur Katapult-Angriff (Angreifer)
-     - Schild → Verteidigung ALLER Einheiten gleichmäßig (Verteidiger) */
-  const fSpeer    = num('a-forschung-speer');
-  const fBogen    = num('a-forschung-bogen');
-  const fKatapult = num('a-forschung-katapult');
-  const fSchild   = num('d-forschung-schild');
+  /* Forschungs-Boni: Eingabe erfolgt als Stufe (0–10), nicht als Direktwert.
+     Umrechnung anhand Militär-Screenshot bestätigt:
+       Speer  Stufe 10 → +20 Speerträger-Angriff  = 2 / Stufe
+       Bogen  Stufe 10 → +30 Bogenschütze-Angriff = 3 / Stufe
+       Schild Stufe 10 → +20 Verteidigung (alle)  = 2 / Stufe
+     Katapult-Angriff kann nicht erforscht werden — auf das Katapult
+     wirkt ausschließlich der Verteidiger-Schild-Bonus (Verteidigung). */
+  const SPEER_PER_LEVEL  = 2;
+  const BOGEN_PER_LEVEL  = 3;
+  const SCHILD_PER_LEVEL = 2;
+  const HAFEN_PER_LEVEL  = 10; // laut Nutzerangabe
+
+  const speerLevel  = Math.min(10, num('a-forschung-speer'));
+  const bogenLevel  = Math.min(10, num('a-forschung-bogen'));
+  const schildLevel = Math.min(10, num('d-forschung-schild'));
+
+  const fSpeer  = speerLevel  * SPEER_PER_LEVEL;
+  const fBogen  = bogenLevel  * BOGEN_PER_LEVEL;
+  const fSchild = schildLevel * SCHILD_PER_LEVEL;
 
   const aBonusAtk = {};
   ALL.forEach(u => { aBonusAtk[u] = 0; });
   aBonusAtk.speertreaeger = fSpeer;
   aBonusAtk.bogenschuetze = fBogen;
-  aBonusAtk.katapult      = fKatapult;
 
   const dBonusDef = {};
   ALL.forEach(u => { dBonusDef[u] = fSchild; });
@@ -314,7 +321,9 @@ function calculate() {
   const warehouseProtect = warehouseLevel === 0 ? 0 : Math.floor(1200 * Math.pow(1.15, warehouseLevel)/10);
   $$('warehouse-protect-label').textContent = warehouseProtect > 0 ? t.lagerhausProtect(fmt(warehouseProtect)) : '';
 
-  const hafenStaerke = num('d-hafen');
+  const hafenLevel   = Math.min(40, num('d-hafen'));
+  const hafenStaerke = hafenLevel * HAFEN_PER_LEVEL;
+  $$('hafen-strength-label').textContent = hafenLevel > 0 ? `= ${fmt(hafenStaerke)} 🛡` : '';
   const basisWert    = num('d-basis');
 
   /* ── Split: land troops and ships fight in separate phases ──
