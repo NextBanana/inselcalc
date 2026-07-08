@@ -519,6 +519,40 @@
           </div>
         </div>
 
+        <!-- Hafen (Phase 2 — Hafenverteidigung) -->
+        <div class="building-card building-card--constructing" style="margin-top:10px;">
+          <div class="building-card-header">
+            <span class="building-card-name" data-i18n="hafen">🚩 Hafen</span>
+          </div>
+          <div class="building-card-body">
+            <div class="building-card-cost">
+              <span class="text-muted" style="font-size:0.82rem;" data-i18n="hafenDesc">Stufe 0–40 · Hafenverteidigung (Phase 2)</span>
+            </div>
+            <div class="building-card-action" style="display:flex;align-items:center;gap:6px;">
+              <span class="upgrade-label" data-i18n="hafenStaerkeLabel">Hafen-Stärke</span>
+              <input type="number" id="d-hafen" min="0" value="0" inputmode="numeric" style="width:70px;">
+            </div>
+          </div>
+          <div class="building-benefit" data-i18n="hafenHint">Wert unbekannt/geschätzt eintragen — genaue Formel (Level → Stärke) ist derzeit nicht bekannt.</div>
+        </div>
+
+        <!-- Haupthaus (Phase 3 — Basis-Wert) -->
+        <div class="building-card building-card--constructing" style="margin-top:10px;">
+          <div class="building-card-header">
+            <span class="building-card-name" data-i18n="haupthaus">🏛️ Haupthaus</span>
+          </div>
+          <div class="building-card-body">
+            <div class="building-card-cost">
+              <span class="text-muted" style="font-size:0.82rem;" data-i18n="haupthausDesc">Basis-Wert für Landkampf (Phase 3)</span>
+            </div>
+            <div class="building-card-action" style="display:flex;align-items:center;gap:6px;">
+              <span class="upgrade-label" data-i18n="basisLabel">Basis-Wert</span>
+              <input type="number" id="d-basis" min="0" value="0" inputmode="numeric" style="width:70px;">
+            </div>
+          </div>
+          <div class="building-benefit" data-i18n="basisHint">Wert unbekannt/geschätzt eintragen — genaue Formel (Haupthaus-Level → Basis) ist derzeit nicht bekannt.</div>
+        </div>
+
         <!-- Lagerhaus -->
         <div class="building-card building-card--constructing" style="margin-top:10px;">
           <div class="building-card-header">
