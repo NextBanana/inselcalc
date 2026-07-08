@@ -21,7 +21,7 @@ const T = {
     gold:              'Gold',
     stone:             'Stein',
     wood:              'Holz',
-    result:            '📊 Kampfergebnis',
+    result:            '📊 Kampfergebnis (nach Phasen)',
     footerText:        'Kampfinsel Kampfrechner · Inoffizielles Tool',
     handbook:          'Handbuch',
     'unit-steinwerfer':          '🪨 Steinwerfer',
@@ -33,7 +33,7 @@ const T = {
     'unit-khs':                  '🛶 Kl. Handelsschiff',
     'unit-ghs':                  '🛥️ Gr. Handelsschiff',
     'unit-kolonisierungsschiff': '⛴️ Kolonisierungsschiff',
-    upgradeBonus:                'Aufwertung',
+    upgradeBonus:                'Aufwertung (Forschung etc.)',
     steinmauer:                  '🧱 Steinmauer',
     steinmauerLevel:             'Stufe',
     steinmauerBonus:             def => `+${def} Verteidigung`,
@@ -41,15 +41,20 @@ const T = {
     lagerhausDesc:               'Stufe 0–30 · schützt Ressourcen',
     lagerhausLevel:              'Stufe',
     lagerhausProtect:            n => `🔒 ${n} geschützt`,
+    hafen:                       '🚩 Hafen',
+    hafenDesc:                   'Stufe 0–40 · Hafenverteidigung (Phase 2)',
+    hafenStaerkeLabel:           'Hafen-Stärke',
+    hafenHint:                   'Wert unbekannt/geschätzt eintragen — genaue Formel (Level → Stärke) ist derzeit nicht bekannt.',
+    haupthaus:                   '🏛️ Haupthaus',
+    haupthausDesc:               'Basis-Wert für Landkampf (Phase 3)',
+    basisLabel:                  'Basis-Wert',
+    basisHint:                   'Wert unbekannt/geschätzt eintragen — genaue Formel (Haupthaus-Level → Basis) ist derzeit nicht bekannt.',
     // dynamic
     troops:     n => `${n} Truppen`,
     slotsFree:  n => `${n} Plätze frei`,
     noShips:       '⚠️ Keine Schiffe!',
     slotsZero:     '0 Plätze',
     resources:  n => `${n} Ressourcen`,
-    draw:    (a, d)       => `⚖️ Unentschieden — Angriff (${a}) = Verteidigung (${d})`,
-    victory: (a, d, adv)  => `🏆 Sieg! — Angriff ${a} schlägt Verteidigung ${d} (Vorteil: +${adv})`,
-    defeat:  (d, a, def)  => `💀 Niederlage — Verteidigung ${d} schlägt Angriff ${a} (Defizit: ${def})`,
     capWarn: (ex, gks, kks) =>
       `${ex} Truppe(n) ohne Schiffsplatz! Du brauchst mindestens ${gks} Gr. Kriegsschiff(e) oder ${kks} Kl. Kriegsschiff(e) mehr.`,
     noMerchants:  '🛶 Keine Traglast — keine Ressourcen können geraubt werden.',
@@ -64,7 +69,7 @@ const T = {
     colUnit:    'Einheit',
     colAtk:     'Angriff',
     colNeeded:  'Zusätzlich nötig',
-    tip: 'Tipp: Kombiniere mehrere Einheitentypen für maximale Effizienz. Die Liste zeigt jeweils die Menge, die alleine zum Sieg reicht.',
+    tip: 'Tipp: Kombiniere mehrere Einheitentypen für maximale Effizienz. Die Liste zeigt jeweils die Menge, die alleine zum Sieg reicht (Landkampf).',
     unitNames: {
       gks:                  'Gr. Kriegsschiff',
       speertreaeger:        'Speerträger',
@@ -74,6 +79,30 @@ const T = {
       katapult:             'Katapult',
       steinwerfer:          'Steinwerfer',
     },
+    // ── Phases ──
+    phase1Title: '🌊 Phase 1 — Seeschlacht',
+    phase2Title: '⚓ Phase 2 — Hafenverteidigung',
+    phase3Title: '🏹 Phase 3 — Landkampf',
+    phase4Title: '💥 Phase 4 — Belagerung',
+    phase5Title: '💰 Phase 5 — Plünderung',
+    phaseNotRun: 'Nicht ausgeführt — vorherige Phase nicht bestanden.',
+    phase4Todo:  'Noch nicht berechenbar: die genaue Formel für Katapult-Belagerung (Mauer-/Hafen-/Haupthaus-Level senken) ist derzeit nicht bekannt.',
+    seaNone:     'Keine Seeschlacht (Verteidiger hat keine Kriegsschiffe).',
+    seaWin:      (a, d) => `Angreifer gewinnt die Seeschlacht — Flottenangriff ${a} schlägt Flottenverteidigung ${d}.`,
+    seaDraw:     (a, d) => `Unentschieden auf See — Flottenangriff ${a} = Flottenverteidigung ${d}. Angriff gilt als abgewehrt.`,
+    seaLose:     (a, d) => `Angreifer verliert die Seeschlacht — Flottenverteidigung ${d} schlägt Flottenangriff ${a}. Angriff abgewehrt.`,
+    seaAssumption: '⚠️ Annahme (ungetestet): Bei Niederlage/Unentschieden in der Seeschlacht wird der gesamte Angriff abgewehrt und die Folgephasen entfallen.',
+    harbourBreak: (a, h) => `Angreifer durchbricht die Hafenverteidigung — Flottenangriff ${a} übersteigt Hafen-Stärke ${h}.`,
+    harbourHeld:  (a, h) => `Hafenverteidigung hält — Flottenangriff ${a} reicht nicht gegen Hafen-Stärke ${h}. Angriff abgewehrt.`,
+    harbourNoInput: 'Keine Hafen-Stärke eingetragen — Phase wird als bestanden angenommen.',
+    landWin:  (a, d) => `Angreifer gewinnt den Landkampf — Angriff ${a} schlägt Verteidigung ${d}.`,
+    landDraw: (a, d) => `Unentschieden — Angriff ${a} = Verteidigung ${d}. Angriff gilt als abgewehrt.`,
+    landLose: (a, d) => `Verteidiger gewinnt den Landkampf — Verteidigung ${d} schlägt Angriff ${a}.`,
+    fleetAtkLabel: 'Flottenangriff',
+    fleetDefLabel: 'Flottenverteidigung',
+    groundAtkLabel: 'Landtruppen-Angriff',
+    groundDefLabel: 'Verteidigung gesamt',
+    groundDefBreakdown: (troops, wall, basis) => `Truppen ${troops} + Mauer ${wall} + Basis ${basis}`,
   },
 
   en: {
@@ -97,7 +126,7 @@ const T = {
     gold:              'Gold',
     stone:             'Stone',
     wood:              'Wood',
-    result:            '📊 Battle Result',
+    result:            '📊 Battle Result (by phase)',
     footerText:        'Kampfinsel Battle Calculator · Unofficial Tool',
     handbook:          'Handbook',
     'unit-steinwerfer':          '🪨 Stone Thrower',
@@ -109,7 +138,7 @@ const T = {
     'unit-khs':                  '🛶 Sm. Merchant',
     'unit-ghs':                  '🛥️ Lg. Merchant',
     'unit-kolonisierungsschiff': '⛴️ Colonization Ship',
-    upgradeBonus:                'Upgrade',
+    upgradeBonus:                'Upgrade (research etc.)',
     steinmauer:                  '🧱 Stone Wall',
     steinmauerLevel:             'Level',
     steinmauerBonus:             def => `+${def} Defence`,
@@ -117,15 +146,20 @@ const T = {
     lagerhausDesc:               'Level 0–30 · protects resources',
     lagerhausLevel:              'Level',
     lagerhausProtect:            n => `🔒 ${n} protected`,
+    hafen:                       '🚩 Harbour',
+    hafenDesc:                   'Level 0–40 · harbour defence (Phase 2)',
+    hafenStaerkeLabel:           'Harbour strength',
+    hafenHint:                   'Enter a known/estimated value — the exact level → strength formula is not yet known.',
+    haupthaus:                   '🏛️ Town Hall',
+    haupthausDesc:               'Base value for land combat (Phase 3)',
+    basisLabel:                  'Base value',
+    basisHint:                   'Enter a known/estimated value — the exact town hall level → base formula is not yet known.',
     // dynamic
     troops:     n => `${n} troops`,
     slotsFree:  n => `${n} slots free`,
     noShips:       '⚠️ No ships!',
     slotsZero:     '0 slots',
     resources:  n => `${n} resources`,
-    draw:    (a, d)       => `⚖️ Draw — Attack (${a}) = Defence (${d})`,
-    victory: (a, d, adv)  => `🏆 Victory! — Attack ${a} beats Defence ${d} (Advantage: +${adv})`,
-    defeat:  (d, a, def)  => `💀 Defeat — Defence ${d} beats Attack ${a} (Deficit: ${def})`,
     capWarn: (ex, gks, kks) =>
       `${ex} troop(s) without a ship slot! You need at least ${gks} Lg. Warship(s) or ${kks} Sm. Warship(s) more.`,
     noMerchants:  '🛶 No carrying capacity — no resources can be looted.',
@@ -140,7 +174,7 @@ const T = {
     colUnit:    'Unit',
     colAtk:     'Attack',
     colNeeded:  'Additionally needed',
-    tip: 'Tip: Combine multiple unit types for maximum efficiency. Each row shows the amount needed if used alone.',
+    tip: 'Tip: Combine multiple unit types for maximum efficiency. Each row shows the amount needed if used alone (land combat).',
     unitNames: {
       gks:                  'Lg. Warship',
       speertreaeger:        'Spearman',
@@ -150,6 +184,30 @@ const T = {
       katapult:             'Catapult',
       steinwerfer:          'Stone Thrower',
     },
+    // ── Phases ──
+    phase1Title: '🌊 Phase 1 — Naval Battle',
+    phase2Title: '⚓ Phase 2 — Harbour Defence',
+    phase3Title: '🏹 Phase 3 — Land Combat',
+    phase4Title: '💥 Phase 4 — Siege',
+    phase5Title: '💰 Phase 5 — Plunder',
+    phaseNotRun: 'Not run — previous phase was not passed.',
+    phase4Todo:  'Not yet calculable: the exact formula for catapult sieges (lowering wall/harbour/town hall levels) is not currently known.',
+    seaNone:     'No naval battle (defender has no warships).',
+    seaWin:      (a, d) => `Attacker wins the naval battle — fleet attack ${a} beats fleet defence ${d}.`,
+    seaDraw:     (a, d) => `Draw at sea — fleet attack ${a} = fleet defence ${d}. Attack counts as repelled.`,
+    seaLose:     (a, d) => `Attacker loses the naval battle — fleet defence ${d} beats fleet attack ${a}. Attack repelled.`,
+    seaAssumption: '⚠️ Assumption (untested): on a naval defeat/draw, the entire attack is repelled and later phases are skipped.',
+    harbourBreak: (a, h) => `Attacker breaks through the harbour defence — fleet attack ${a} exceeds harbour strength ${h}.`,
+    harbourHeld:  (a, h) => `Harbour defence holds — fleet attack ${a} isn't enough against harbour strength ${h}. Attack repelled.`,
+    harbourNoInput: 'No harbour strength entered — phase assumed passed.',
+    landWin:  (a, d) => `Attacker wins the land battle — attack ${a} beats defence ${d}.`,
+    landDraw: (a, d) => `Draw — attack ${a} = defence ${d}. Attack counts as repelled.`,
+    landLose: (a, d) => `Defender wins the land battle — defence ${d} beats attack ${a}.`,
+    fleetAtkLabel: 'Fleet attack',
+    fleetDefLabel: 'Fleet defence',
+    groundAtkLabel: 'Land troop attack',
+    groundDefLabel: 'Total defence',
+    groundDefBreakdown: (troops, wall, basis) => `Troops ${troops} + Wall ${wall} + Base ${basis}`,
   },
 };
 
@@ -214,7 +272,7 @@ function calculate() {
   ALL.forEach(u => { a[u] = num(`a-${u}`); d[u] = num(`d-${u}`); });
   const res = { gold: num('d-gold'), silber: num('d-silber'), holz: num('d-holz') };
 
-  /* Read upgrade bonuses per unit per side */
+  /* Read upgrade bonuses per unit per side (Forschung / Aufwertung) */
   const aBonusAtk = {}, dBonusDef = {};
   ALL.forEach(u => {
     aBonusAtk[u] = num(`a-${u}-atk`);
@@ -228,19 +286,31 @@ function calculate() {
   const warehouseProtect = warehouseLevel === 0 ? 0 : Math.floor(1200 * Math.pow(1.15, warehouseLevel)/10);
   $$('warehouse-protect-label').textContent = warehouseProtect > 0 ? t.lagerhausProtect(fmt(warehouseProtect)) : '';
 
-  const totalAtk = ALL.reduce((s, u) => s + a[u] * (UNITS[u].atk + aBonusAtk[u]), 0);
-  const totalDef = ALL.reduce((s, u) => s + d[u] * (UNITS[u].def + dBonusDef[u]), 0) + wallBonus;
+  const hafenStaerke = num('d-hafen');
+  const basisWert    = num('d-basis');
+
+  /* ── Split: land troops and ships fight in separate phases ──
+     (Confirmed against real Kampfinsel-Berichte: Landkampf-Angriff
+     matches the ground-unit sum alone, ships are NOT included.) */
+  const groundAtk = GROUND.reduce((s, u) => s + a[u] * (UNITS[u].atk + aBonusAtk[u]), 0);
+  const groundDefTroops = GROUND.reduce((s, u) => s + d[u] * (UNITS[u].def + dBonusDef[u]), 0);
+  const groundDef = groundDefTroops + wallBonus + basisWert;
+
+  const shipAtkA = SHIPS.reduce((s, u) => s + a[u] * (UNITS[u].atk + aBonusAtk[u]), 0);
+  const shipDefD = SHIPS.reduce((s, u) => s + d[u] * (UNITS[u].def + dBonusDef[u]), 0);
+
+  const defenderHasShips = SHIPS.some(u => d[u] > 0);
 
   const troops    = GROUND.reduce((s, u) => s + a[u], 0);
   const shipCap   = a.kks * 5 + a.gks * 10;
   const transport = ALL.reduce((s, u) => s + a[u] * (UNITS[u].resCap || 0), 0);
   const capOver   = troops > 0 && troops > shipCap;
 
-  const wins     = totalAtk > totalDef;
-  const draw     = totalAtk === totalDef;
-  const hasInput = totalAtk > 0 || totalDef > 0;
+  const hasInput = groundAtk > 0 || groundDefTroops > 0 || shipAtkA > 0 || shipDefD > 0 || wallBonus > 0 || basisWert > 0;
 
-  /* ── Summary bar ── */
+  /* ── Summary bar (rough overview across all phases combined) ── */
+  const totalAtk = groundAtk + shipAtkA;
+  const totalDef = groundDef + shipDefD;
   $$('bar-atk').textContent = fmt(totalAtk);
   $$('bar-def').textContent = fmt(totalDef);
   $$('wall-bonus-label').textContent = wallBonus > 0 ? t.steinmauerBonus(fmt(wallBonus)) : '';
@@ -270,47 +340,139 @@ function calculate() {
     capWarn.style.display = 'none';
   }
 
-  /* ── Outcome banner ── */
-  const banner = $$('outcome-banner');
-  if (!hasInput) {
-    banner.style.display = 'none';
-  } else if (draw) {
-    banner.style.display = '';
-    banner.className = 'warning';
-    banner.innerHTML = t.draw(fmt(totalAtk), fmt(totalDef));
-  } else if (wins) {
-    banner.style.display = '';
-    banner.className = 'success';
-    banner.innerHTML = t.victory(fmt(totalAtk), fmt(totalDef), fmt(totalAtk - totalDef));
-  } else {
-    banner.style.display = '';
-    banner.className = 'error';
-    banner.innerHTML = t.defeat(fmt(totalDef), fmt(totalAtk), fmt(totalDef - totalAtk));
-  }
+  /* ── Old single banner is retired in favor of per-phase cards ── */
+  $$('outcome-banner').style.display = 'none';
 
-  /* ── Result detail ── */
+  /* ── Result detail: render the 5 phases ── */
   const detailEl = $$('result-detail');
   if (!hasInput) { detailEl.innerHTML = ''; return; }
 
-  if (wins) {
-    detailEl.innerHTML = renderLoot(t, res, transport, warehouseProtect);
-  } else if (!draw) {
-    detailEl.innerHTML = renderUnitsNeeded(t, totalDef - totalAtk, aBonusAtk);
+  detailEl.innerHTML = renderPhases(t, {
+    groundAtk, groundDef, groundDefTroops, wallBonus, basisWert,
+    shipAtkA, shipDefD, defenderHasShips, hafenStaerke,
+    res, transport, warehouseProtect, aBonusAtk,
+  });
+}
+
+/* ─── Phase rendering (mirrors the in-game Kampfbericht) ─── */
+function renderPhases(t, ctx) {
+  const {
+    groundAtk, groundDef, groundDefTroops, wallBonus, basisWert,
+    shipAtkA, shipDefD, defenderHasShips, hafenStaerke,
+    res, transport, warehouseProtect, aBonusAtk,
+  } = ctx;
+
+  let alive = true;      // whether the attack still proceeds to the next phase
+  let landWon = false;
+
+  const cards = [];
+
+  /* ── Phase 1: Seeschlacht ── */
+  let p1Body, p1Class = '';
+  if (!defenderHasShips) {
+    p1Body = `<div class="text-muted" style="padding:8px 10px;">${t.seaNone}</div>`;
   } else {
-    detailEl.innerHTML = '';
+    const seaWin  = shipAtkA > shipDefD;
+    const seaDraw = shipAtkA === shipDefD;
+    p1Class = seaWin ? 'success' : 'error';
+    let msg;
+    if (seaWin)       msg = t.seaWin(fmt(shipAtkA), fmt(shipDefD));
+    else if (seaDraw) msg = t.seaDraw(fmt(shipAtkA), fmt(shipDefD));
+    else               msg = t.seaLose(fmt(shipAtkA), fmt(shipDefD));
+    p1Body = `
+      <div class="${p1Class}" style="margin:8px 10px 4px;">${msg}</div>
+      ${!seaWin ? `<div class="warning" style="margin:0 10px 8px;font-size:0.82rem;">${t.seaAssumption}</div>` : ''}
+      <div class="building-benefit" style="padding:0 10px 8px;">
+        ${t.fleetAtkLabel}: <strong>${fmt(shipAtkA)}</strong> · ${t.fleetDefLabel}: <strong>${fmt(shipDefD)}</strong>
+      </div>`;
+    if (!seaWin) alive = false;
   }
+  cards.push(phaseCard(t.phase1Title, p1Body));
+
+  /* ── Phase 2: Hafenverteidigung ── */
+  let p2Body;
+  if (!alive) {
+    p2Body = `<div class="text-muted" style="padding:8px 10px;">${t.phaseNotRun}</div>`;
+  } else {
+    if (hafenStaerke <= 0) {
+      p2Body = `<div class="text-muted" style="padding:8px 10px;">${t.harbourNoInput}</div>`;
+    } else {
+      const breakThrough = shipAtkA > hafenStaerke;
+      const cls = breakThrough ? 'success' : 'error';
+      const msg = breakThrough
+        ? t.harbourBreak(fmt(shipAtkA), fmt(hafenStaerke))
+        : t.harbourHeld(fmt(shipAtkA), fmt(hafenStaerke));
+      p2Body = `<div class="${cls}" style="margin:8px 10px;">${msg}</div>
+        <div class="building-benefit" style="padding:0 10px 8px;">${t.hafenHint}</div>`;
+      if (!breakThrough) alive = false;
+    }
+  }
+  cards.push(phaseCard(t.phase2Title, p2Body));
+
+  /* ── Phase 3: Landkampf ── */
+  let p3Body;
+  if (!alive) {
+    p3Body = `<div class="text-muted" style="padding:8px 10px;">${t.phaseNotRun}</div>`;
+  } else {
+    const win  = groundAtk > groundDef;
+    const draw = groundAtk === groundDef;
+    const cls  = win ? 'success' : (draw ? 'warning' : 'error');
+    let msg;
+    if (win)       msg = t.landWin(fmt(groundAtk), fmt(groundDef));
+    else if (draw) msg = t.landDraw(fmt(groundAtk), fmt(groundDef));
+    else            msg = t.landLose(fmt(groundAtk), fmt(groundDef));
+    p3Body = `
+      <div class="${cls}" style="margin:8px 10px 4px;">${msg}</div>
+      <div class="building-benefit" style="padding:0 10px 8px;">
+        ${t.groundAtkLabel}: <strong>${fmt(groundAtk)}</strong> ·
+        ${t.groundDefLabel}: <strong>${fmt(groundDef)}</strong>
+        (${t.groundDefBreakdown(fmt(groundDefTroops), fmt(wallBonus), fmt(basisWert))})
+      </div>`;
+    if (win) landWon = true; else alive = false;
+    if (!win && !draw) {
+      p3Body += renderUnitsNeeded(t, groundDef - groundAtk, aBonusAtk);
+    }
+  }
+  cards.push(phaseCard(t.phase3Title, p3Body));
+
+  /* ── Phase 4: Belagerung (formula not yet known, not modeled) ── */
+  const p4Body = `<div class="text-muted" style="padding:8px 10px;">
+    ${!landWon ? t.phaseNotRun : t.phase4Todo}
+  </div>`;
+  cards.push(phaseCard(t.phase4Title, p4Body, true));
+
+  /* ── Phase 5: Plünderung ── */
+  let p5Body;
+  if (!landWon) {
+    p5Body = `<div class="text-muted" style="padding:8px 10px;">${t.phaseNotRun}</div>`;
+  } else {
+    p5Body = renderLoot(t, res, transport, warehouseProtect);
+  }
+  cards.push(phaseCard(t.phase5Title, p5Body));
+
+  return cards.join('');
+}
+
+function phaseCard(title, bodyHtml, muted) {
+  return `
+    <div class="building-card" style="margin-bottom:10px;${muted ? 'opacity:0.75;' : ''}">
+      <div class="building-card-header">
+        <span class="building-card-name">${title}</span>
+      </div>
+      ${bodyHtml}
+    </div>`;
 }
 
 /* ─── Loot ─── */
 function renderLoot(t, res, transport, warehouseProtect) {
   if (transport === 0) {
-    return `<div class="warning" style="margin-top:10px;">${t.noMerchants}</div>`;
+    return `<div class="warning" style="margin:8px 10px;">${t.noMerchants}</div>`;
   }
   const totalRes = res.gold + res.silber + res.holz;
   const stealable = Math.max(0, totalRes - warehouseProtect);
 
   let loot = { gold: 0, silber: 0, holz: 0 };
-  if (stealable > 0) {
+  if (stealable > 0 && totalRes > 0) {
     const ratio = stealable / totalRes;
     const avail = {
       gold:   Math.floor(res.gold   * ratio),
@@ -334,6 +496,7 @@ function renderLoot(t, res, transport, warehouseProtect) {
     : '';
 
   return `
+    <div style="padding:8px 10px;">
     <div class="result-grid">
       <div class="result-tile">
         <div class="result-tile-icon">⚜</div>
@@ -357,10 +520,11 @@ function renderLoot(t, res, transport, warehouseProtect) {
     ${protectedNote}
     <div class="building-benefit" style="margin-top:6px;text-align:right;">
       ${t.lootSummary(fmt(totalLoot), fmt(usedCap), fmt(transport))}
+    </div>
     </div>`;
 }
 
-/* ─── Units needed ─── */
+/* ─── Units needed (land combat only) ─── */
 function renderUnitsNeeded(t, deficit, aBonusAtk) {
   const rows = UNITS_NEEDED_DEFS.map(u => {
     const effectiveAtk = UNITS[u.id].atk + (aBonusAtk[u.id] || 0);
@@ -374,23 +538,18 @@ function renderUnitsNeeded(t, deficit, aBonusAtk) {
   }).join('');
 
   return `
-    <div class="building-card" style="margin-top:10px; border-left: 3px solid var(--c-red-border);">
-      <div class="building-card-header">
-        <span class="building-card-name">${t.unitsNeededTitle}</span>
-        <span class="building-card-level">${t.unitsNeededLevel(fmt(deficit))}</span>
-      </div>
-      <div style="padding: 8px 10px;">
-        <table class="units-needed-table">
-          <thead><tr>
-            <th>${t.colUnit}</th>
-            <th>${t.colAtk}</th>
-            <th style="text-align:right;">${t.colNeeded}</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-        <div class="building-benefit" style="margin-top:6px;">
-          💡 ${t.tip}
-        </div>
+    <div style="padding: 4px 10px 8px;">
+      <div class="text-muted" style="font-size:0.82rem;margin-bottom:4px;">${t.unitsNeededTitle} · ${t.unitsNeededLevel(fmt(deficit))}</div>
+      <table class="units-needed-table">
+        <thead><tr>
+          <th>${t.colUnit}</th>
+          <th>${t.colAtk}</th>
+          <th style="text-align:right;">${t.colNeeded}</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="building-benefit" style="margin-top:6px;">
+        💡 ${t.tip}
       </div>
     </div>`;
 }
