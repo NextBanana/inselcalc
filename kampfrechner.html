@@ -226,22 +226,19 @@
             <span class="building-card-name" data-i18n="forschung">🔬 Forschung</span>
           </div>
           <div class="building-card-cost" style="padding:6px 10px 0;">
-            <span class="text-muted" style="font-size:0.82rem;" data-i18n="forschungDescAtk">Wirkt automatisch auf die passende Einheit.</span>
+            <span class="text-muted" style="font-size:0.82rem;" data-i18n="forschungDescAtk">Stufe eintragen — wirkt automatisch auf die passende Einheit.</span>
           </div>
           <div class="resource-input-row">
-            <div class="resource-input-label"><span>🗡️</span> <span data-i18n="forschungSpeer">Speer (+Speerträger-Angriff)</span></div>
-            <input type="number" id="a-forschung-speer" min="0" value="0" inputmode="numeric">
+            <div class="resource-input-label"><span>🗡️</span> <span data-i18n="forschungSpeer">Speer-Stufe (+2 Speerträger-Angriff/Stufe)</span></div>
+            <input type="number" id="a-forschung-speer" min="0" max="10" value="0" inputmode="numeric">
           </div>
           <div class="resource-input-row">
-            <div class="resource-input-label"><span>🏹</span> <span data-i18n="forschungBogen">Bogen (+Bogenschütze-Angriff)</span></div>
-            <input type="number" id="a-forschung-bogen" min="0" value="0" inputmode="numeric">
+            <div class="resource-input-label"><span>🏹</span> <span data-i18n="forschungBogen">Bogen-Stufe (+3 Bogenschütze-Angriff/Stufe)</span></div>
+            <input type="number" id="a-forschung-bogen" min="0" max="10" value="0" inputmode="numeric">
           </div>
-          <div class="resource-input-row">
-            <div class="resource-input-label"><span>💥</span> <span data-i18n="forschungKatapult">Katapult (+Katapult-Angriff)</span></div>
-            <input type="number" id="a-forschung-katapult" min="0" value="0" inputmode="numeric">
-          </div>
-          <div class="building-benefit" data-i18n="forschungHintAtk">Werte pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "35 (15+20)" → hier 20 eintragen.</div>
+          <div class="building-benefit" data-i18n="forschungHintAtk">Stufe 0–10, siehe Forschungsmenü. Speer und Bogen bestätigt anhand Militär-Übersicht (+2 bzw. +3 pro Stufe). Katapult-Angriff kann nicht durch Forschung verstärkt werden — nur "Schild" wirkt auf das Katapult (Verteidigung).</div>
         </div>
+
 
         <!-- Capacity bar -->
         <div class="construction-active" style="margin-top:10px;">
@@ -426,10 +423,10 @@
             <span class="text-muted" style="font-size:0.82rem;" data-i18n="forschungDescDef">Schild wirkt gleichmäßig auf die Verteidigung aller Einheiten.</span>
           </div>
           <div class="resource-input-row">
-            <div class="resource-input-label"><span>🛡️</span> <span data-i18n="forschungSchild">Schild (+Verteidigung aller Einheiten)</span></div>
-            <input type="number" id="d-forschung-schild" min="0" value="0" inputmode="numeric">
+            <div class="resource-input-label"><span>🛡️</span> <span data-i18n="forschungSchild">Schild-Stufe (+2 Verteidigung aller Einheiten/Stufe)</span></div>
+            <input type="number" id="d-forschung-schild" min="0" max="10" value="0" inputmode="numeric">
           </div>
-          <div class="building-benefit" data-i18n="forschungHintDef">Wert pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "28 (8+20)" → hier 20 eintragen.</div>
+          <div class="building-benefit" data-i18n="forschungHintDef">Stufe 0–10, siehe Forschungsmenü. Bestätigt anhand Militär-Übersicht (20 bei Stufe 10 = +2/Stufe).</div>
         </div>
 
         <!-- Steinmauer -->
@@ -453,17 +450,17 @@
         <div class="building-card building-card--constructing" style="margin-top:10px;">
           <div class="building-card-header">
             <span class="building-card-name" data-i18n="hafen">🚩 Hafen</span>
+            <span class="building-card-level" id="hafen-strength-label"></span>
           </div>
           <div class="building-card-body">
             <div class="building-card-cost">
-              <span class="text-muted" style="font-size:0.82rem;" data-i18n="hafenDesc">Stufe 0–40 · Hafenverteidigung (Phase 2)</span>
+              <span class="text-muted" style="font-size:0.82rem;" data-i18n="hafenDesc">Stufe 0–40 · 10 Punkte Hafenstärke / Stufe (Phase 2)</span>
             </div>
             <div class="building-card-action" style="display:flex;align-items:center;gap:6px;">
-              <span class="upgrade-label" data-i18n="hafenStaerkeLabel">Hafen-Stärke</span>
-              <input type="number" id="d-hafen" min="0" value="0" inputmode="numeric" style="width:70px;">
+              <span class="upgrade-label" data-i18n="steinmauerLevel">Stufe</span>
+              <input type="number" id="d-hafen" min="0" max="40" value="0" inputmode="numeric" style="width:60px;">
             </div>
           </div>
-          <div class="building-benefit" data-i18n="hafenHint">Wert unbekannt/geschätzt eintragen — genaue Formel (Level → Stärke) ist derzeit nicht bekannt.</div>
         </div>
 
         <!-- Haupthaus (Phase 3 — Basis-Wert) -->
