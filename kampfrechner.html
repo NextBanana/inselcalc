@@ -82,12 +82,6 @@
                 <input type="number" id="a-steinwerfer" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-steinwerfer-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-steinwerfer-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ready">
@@ -104,12 +98,6 @@
               <div class="building-card-action">
                 <input type="number" id="a-speertreaeger" min="0" value="0" inputmode="numeric">
               </div>
-            </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-speertreaeger-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-speertreaeger-def" min="0" value="0" inputmode="numeric">
             </div>
           </div>
 
@@ -128,12 +116,6 @@
                 <input type="number" id="a-bogenschuetze" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-bogenschuetze-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-bogenschuetze-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ready">
@@ -149,12 +131,6 @@
               <div class="building-card-action">
                 <input type="number" id="a-katapult" min="0" value="0" inputmode="numeric">
               </div>
-            </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-katapult-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-katapult-def" min="0" value="0" inputmode="numeric">
             </div>
           </div>
 
@@ -173,12 +149,6 @@
                 <input type="number" id="a-kks" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-kks-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-kks-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ship">
@@ -195,12 +165,6 @@
               <div class="building-card-action">
                 <input type="number" id="a-gks" min="0" value="0" inputmode="numeric">
               </div>
-            </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-gks-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-gks-def" min="0" value="0" inputmode="numeric">
             </div>
           </div>
 
@@ -219,12 +183,6 @@
                 <input type="number" id="a-khs" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-khs-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-khs-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ship">
@@ -242,12 +200,6 @@
                 <input type="number" id="a-ghs" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-ghs-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-ghs-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ship">
@@ -264,15 +216,32 @@
                 <input type="number" id="a-kolonisierungsschiff" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="a-kolonisierungsschiff-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="a-kolonisierungsschiff-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
         </div><!-- /attacker-grid -->
+
+        <!-- Forschung (Angreifer) -->
+        <div class="building-card building-card--constructing" style="margin-top:10px;">
+          <div class="building-card-header">
+            <span class="building-card-name" data-i18n="forschung">🔬 Forschung</span>
+          </div>
+          <div class="building-card-cost" style="padding:6px 10px 0;">
+            <span class="text-muted" style="font-size:0.82rem;" data-i18n="forschungDescAtk">Wirkt automatisch auf die passende Einheit.</span>
+          </div>
+          <div class="resource-input-row">
+            <div class="resource-input-label"><span>🗡️</span> <span data-i18n="forschungSpeer">Speer (+Speerträger-Angriff)</span></div>
+            <input type="number" id="a-forschung-speer" min="0" value="0" inputmode="numeric">
+          </div>
+          <div class="resource-input-row">
+            <div class="resource-input-label"><span>🏹</span> <span data-i18n="forschungBogen">Bogen (+Bogenschütze-Angriff)</span></div>
+            <input type="number" id="a-forschung-bogen" min="0" value="0" inputmode="numeric">
+          </div>
+          <div class="resource-input-row">
+            <div class="resource-input-label"><span>💥</span> <span data-i18n="forschungKatapult">Katapult (+Katapult-Angriff)</span></div>
+            <input type="number" id="a-forschung-katapult" min="0" value="0" inputmode="numeric">
+          </div>
+          <div class="building-benefit" data-i18n="forschungHintAtk">Werte pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "35 (15+20)" → hier 20 eintragen.</div>
+        </div>
 
         <!-- Capacity bar -->
         <div class="construction-active" style="margin-top:10px;">
@@ -316,12 +285,6 @@
                 <input type="number" id="d-steinwerfer" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-steinwerfer-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-steinwerfer-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ready">
@@ -337,12 +300,6 @@
               <div class="building-card-action">
                 <input type="number" id="d-speertreaeger" min="0" value="0" inputmode="numeric">
               </div>
-            </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-speertreaeger-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-speertreaeger-def" min="0" value="0" inputmode="numeric">
             </div>
           </div>
 
@@ -360,12 +317,6 @@
                 <input type="number" id="d-bogenschuetze" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-bogenschuetze-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-bogenschuetze-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ready">
@@ -381,12 +332,6 @@
               <div class="building-card-action">
                 <input type="number" id="d-katapult" min="0" value="0" inputmode="numeric">
               </div>
-            </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-katapult-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-katapult-def" min="0" value="0" inputmode="numeric">
             </div>
           </div>
 
@@ -404,12 +349,6 @@
                 <input type="number" id="d-kks" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-kks-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-kks-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ship">
@@ -425,12 +364,6 @@
               <div class="building-card-action">
                 <input type="number" id="d-gks" min="0" value="0" inputmode="numeric">
               </div>
-            </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-gks-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-gks-def" min="0" value="0" inputmode="numeric">
             </div>
           </div>
 
@@ -448,12 +381,6 @@
                 <input type="number" id="d-khs" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-khs-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-khs-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
           <div class="building-card building-card--ship">
@@ -469,12 +396,6 @@
               <div class="building-card-action">
                 <input type="number" id="d-ghs" min="0" value="0" inputmode="numeric">
               </div>
-            </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-ghs-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-ghs-def" min="0" value="0" inputmode="numeric">
             </div>
           </div>
 
@@ -492,15 +413,24 @@
                 <input type="number" id="d-kolonisierungsschiff" min="0" value="0" inputmode="numeric">
               </div>
             </div>
-            <div class="upgrade-row">
-              <span class="upgrade-label">+⚔</span>
-              <input type="number" class="upgrade-input" id="d-kolonisierungsschiff-atk" min="0" value="0" inputmode="numeric">
-              <span class="upgrade-label">+🛡</span>
-              <input type="number" class="upgrade-input" id="d-kolonisierungsschiff-def" min="0" value="0" inputmode="numeric">
-            </div>
           </div>
 
         </div><!-- /defender-grid -->
+
+        <!-- Forschung (Verteidiger) -->
+        <div class="building-card building-card--constructing" style="margin-top:10px;">
+          <div class="building-card-header">
+            <span class="building-card-name" data-i18n="forschung">🔬 Forschung</span>
+          </div>
+          <div class="building-card-cost" style="padding:6px 10px 0;">
+            <span class="text-muted" style="font-size:0.82rem;" data-i18n="forschungDescDef">Schild wirkt gleichmäßig auf die Verteidigung aller Einheiten.</span>
+          </div>
+          <div class="resource-input-row">
+            <div class="resource-input-label"><span>🛡️</span> <span data-i18n="forschungSchild">Schild (+Verteidigung aller Einheiten)</span></div>
+            <input type="number" id="d-forschung-schild" min="0" value="0" inputmode="numeric">
+          </div>
+          <div class="building-benefit" data-i18n="forschungHintDef">Wert pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "28 (8+20)" → hier 20 eintragen.</div>
+        </div>
 
         <!-- Steinmauer -->
         <div class="building-card building-card--constructing" style="margin-top:10px;">
