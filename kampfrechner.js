@@ -77,12 +77,15 @@ const T = {
     colAtk:     'Angriff',
     colNeeded:  'Zusätzlich nötig',
     tip: 'Tipp: Kombiniere mehrere Einheitentypen für maximale Effizienz. Die Liste zeigt jeweils die Menge, die alleine zum Sieg reicht (Landkampf).',
+    tipSea: 'Tipp: Kombiniere mehrere Schiffstypen für maximale Effizienz. Die Liste zeigt jeweils die Menge, die alleine zum Sieg reicht (Seeschlacht).',
     unitNames: {
       gks:                  'Gr. Kriegsschiff',
       speertreaeger:        'Speerträger',
       bogenschuetze:        'Bogenschütze',
       kolonisierungsschiff: 'Kolonisierungsschiff',
       kks:                  'Kl. Kriegsschiff',
+      khs:                  'Kl. Handelsschiff',
+      ghs:                  'Gr. Handelsschiff',
       katapult:             'Katapult',
       steinwerfer:          'Steinwerfer',
     },
@@ -189,12 +192,15 @@ const T = {
     colAtk:     'Attack',
     colNeeded:  'Additionally needed',
     tip: 'Tip: Combine multiple unit types for maximum efficiency. Each row shows the amount needed if used alone (land combat).',
+    tipSea: 'Tip: Combine multiple ship types for maximum efficiency. Each row shows the amount needed if used alone (naval battle).',
     unitNames: {
       gks:                  'Lg. Warship',
       speertreaeger:        'Spearman',
       bogenschuetze:        'Archer',
       kolonisierungsschiff: 'Colonization Ship',
       kks:                  'Sm. Warship',
+      khs:                  'Sm. Merchant',
+      ghs:                  'Lg. Merchant',
       katapult:             'Catapult',
       steinwerfer:          'Stone Thrower',
     },
@@ -240,15 +246,20 @@ const UNITS = {
 const GROUND = ['steinwerfer', 'speertreaeger', 'bogenschuetze', 'katapult'];
 const SHIPS  = ['kks', 'gks', 'khs', 'ghs', 'kolonisierungsschiff'];
 const ALL    = [...GROUND, ...SHIPS];
+/* Handelsschiffe (khs, ghs) nehmen laut Nutzerangabe nicht am Seekampf teil —
+   sie zählen nur für Transportkapazität, nicht für Seeschlacht/Hafenverteidigung. */
+const COMBAT_SHIPS = ['kks', 'gks', 'kolonisierungsschiff'];
 
 const UNITS_NEEDED_DEFS = [
-  { id: 'gks',                  icon: '🚢' },
-  { id: 'speertreaeger',        icon: '🗡️' },
   { id: 'bogenschuetze',        icon: '🏹' },
-  { id: 'kolonisierungsschiff', icon: '⛴️' },
-  { id: 'kks',                  icon: '⛵' },
+  { id: 'speertreaeger',        icon: '🗡️' },
   { id: 'katapult',             icon: '💥' },
   { id: 'steinwerfer',          icon: '🪨' },
+];
+const SHIPS_NEEDED_DEFS = [
+  { id: 'gks',                  icon: '🚢' },
+  { id: 'kks',                  icon: '⛵' },
+  { id: 'kolonisierungsschiff', icon: '⛴️' },
 ];
 
 /* ─── Language state ─── */
@@ -333,10 +344,10 @@ function calculate() {
   const groundDefTroops = GROUND.reduce((s, u) => s + d[u] * (UNITS[u].def + dBonusDef[u]), 0);
   const groundDef = groundDefTroops + wallBonus + basisWert;
 
-  const shipAtkA = SHIPS.reduce((s, u) => s + a[u] * (UNITS[u].atk + aBonusAtk[u]), 0);
-  const shipDefD = SHIPS.reduce((s, u) => s + d[u] * (UNITS[u].def + dBonusDef[u]), 0);
+  const shipAtkA = COMBAT_SHIPS.reduce((s, u) => s + a[u] * (UNITS[u].atk + aBonusAtk[u]), 0);
+  const shipDefD = COMBAT_SHIPS.reduce((s, u) => s + d[u] * (UNITS[u].def + dBonusDef[u]), 0);
 
-  const defenderHasShips = SHIPS.some(u => d[u] > 0);
+  const defenderHasShips = COMBAT_SHIPS.some(u => d[u] > 0);
 
   const troops    = GROUND.reduce((s, u) => s + a[u], 0);
   const shipCap   = a.kks * 5 + a.gks * 10;
@@ -423,6 +434,9 @@ function renderPhases(t, ctx) {
         ${t.fleetAtkLabel}: <strong>${fmt(shipAtkA)}</strong> · ${t.fleetDefLabel}: <strong>${fmt(shipDefD)}</strong>
       </div>`;
     if (!seaWin) alive = false;
+    if (!seaWin && !seaDraw) {
+      p1Body += renderUnitsNeeded(t, shipDefD - shipAtkA, aBonusAtk, SHIPS_NEEDED_DEFS, 'sea');
+    }
   }
   cards.push(phaseCard(t.phase1Title, p1Body));
 
@@ -467,7 +481,7 @@ function renderPhases(t, ctx) {
       </div>`;
     if (win) landWon = true; else alive = false;
     if (!win && !draw) {
-      p3Body += renderUnitsNeeded(t, groundDef - groundAtk, aBonusAtk);
+      p3Body += renderUnitsNeeded(t, groundDef - groundAtk, aBonusAtk, UNITS_NEEDED_DEFS, 'land');
     }
   }
   cards.push(phaseCard(t.phase3Title, p3Body));
@@ -561,9 +575,9 @@ function renderLoot(t, res, transport, warehouseProtect) {
     </div>`;
 }
 
-/* ─── Units needed (land combat only) ─── */
-function renderUnitsNeeded(t, deficit, aBonusAtk) {
-  const rows = UNITS_NEEDED_DEFS.map(u => {
+/* ─── Units needed (land combat or naval battle, deficit-based) ─── */
+function renderUnitsNeeded(t, deficit, aBonusAtk, unitDefs, context) {
+  const rows = unitDefs.map(u => {
     const effectiveAtk = UNITS[u.id].atk + (aBonusAtk[u.id] || 0);
     const count = Math.ceil(deficit / effectiveAtk);
     const name  = t.unitNames[u.id];
@@ -573,6 +587,8 @@ function renderUnitsNeeded(t, deficit, aBonusAtk) {
       <td class="units-needed-count">+${fmt(count)}</td>
     </tr>`;
   }).join('');
+
+  const tip = context === 'sea' ? t.tipSea : t.tip;
 
   return `
     <div style="padding: 4px 10px 8px;">
@@ -586,7 +602,7 @@ function renderUnitsNeeded(t, deficit, aBonusAtk) {
         <tbody>${rows}</tbody>
       </table>
       <div class="building-benefit" style="margin-top:6px;">
-        💡 ${t.tip}
+        💡 ${tip}
       </div>
     </div>`;
 }
