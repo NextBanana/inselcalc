@@ -33,7 +33,15 @@ const T = {
     'unit-khs':                  '🛶 Kl. Handelsschiff',
     'unit-ghs':                  '🛥️ Gr. Handelsschiff',
     'unit-kolonisierungsschiff': '⛴️ Kolonisierungsschiff',
-    upgradeBonus:                'Aufwertung (Forschung etc.)',
+    forschung:                   '🔬 Forschung',
+    forschungDescAtk:            'Wirkt automatisch auf die passende Einheit.',
+    forschungSpeer:              'Speer (+Speerträger-Angriff)',
+    forschungBogen:              'Bogen (+Bogenschütze-Angriff)',
+    forschungKatapult:           'Katapult (+Katapult-Angriff)',
+    forschungHintAtk:            'Werte pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "35 (15+20)" → hier 20 eintragen.',
+    forschungDescDef:            'Schild wirkt gleichmäßig auf die Verteidigung aller Einheiten.',
+    forschungSchild:             'Schild (+Verteidigung aller Einheiten)',
+    forschungHintDef:            'Wert pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "28 (8+20)" → hier 20 eintragen.',
     steinmauer:                  '🧱 Steinmauer',
     steinmauerLevel:             'Stufe',
     steinmauerBonus:             def => `+${def} Verteidigung`,
@@ -138,7 +146,15 @@ const T = {
     'unit-khs':                  '🛶 Sm. Merchant',
     'unit-ghs':                  '🛥️ Lg. Merchant',
     'unit-kolonisierungsschiff': '⛴️ Colonization Ship',
-    upgradeBonus:                'Upgrade (research etc.)',
+    forschung:                   '🔬 Research',
+    forschungDescAtk:            'Applies automatically to the matching unit.',
+    forschungSpeer:              'Spear (+Spearman attack)',
+    forschungBogen:              'Bow (+Archer attack)',
+    forschungKatapult:           'Catapult (+Catapult attack)',
+    forschungHintAtk:            'Value per unit (not level) — e.g. read from the Military overview: "35 (15+20)" → enter 20 here.',
+    forschungDescDef:            'Shield applies evenly to the defence of all units.',
+    forschungSchild:             'Shield (+Defence of all units)',
+    forschungHintDef:            'Value per unit (not level) — e.g. read from the Military overview: "28 (8+20)" → enter 20 here.',
     steinmauer:                  '🧱 Stone Wall',
     steinmauerLevel:             'Level',
     steinmauerBonus:             def => `+${def} Defence`,
@@ -272,12 +288,24 @@ function calculate() {
   ALL.forEach(u => { a[u] = num(`a-${u}`); d[u] = num(`d-${u}`); });
   const res = { gold: num('d-gold'), silber: num('d-silber'), holz: num('d-holz') };
 
-  /* Read upgrade bonuses per unit per side (Forschung / Aufwertung) */
-  const aBonusAtk = {}, dBonusDef = {};
-  ALL.forEach(u => {
-    aBonusAtk[u] = num(`a-${u}-atk`);
-    dBonusDef[u] = num(`d-${u}-def`);
-  });
+  /* Forschungs-Boni: wirken auf bestimmte Einheiten (siehe Handbuch/Militär-Screen)
+     - Speer  → nur Speerträger-Angriff (Angreifer)
+     - Bogen  → nur Bogenschütze-Angriff (Angreifer)
+     - Katapult → nur Katapult-Angriff (Angreifer)
+     - Schild → Verteidigung ALLER Einheiten gleichmäßig (Verteidiger) */
+  const fSpeer    = num('a-forschung-speer');
+  const fBogen    = num('a-forschung-bogen');
+  const fKatapult = num('a-forschung-katapult');
+  const fSchild   = num('d-forschung-schild');
+
+  const aBonusAtk = {};
+  ALL.forEach(u => { aBonusAtk[u] = 0; });
+  aBonusAtk.speertreaeger = fSpeer;
+  aBonusAtk.bogenschuetze = fBogen;
+  aBonusAtk.katapult      = fKatapult;
+
+  const dBonusDef = {};
+  ALL.forEach(u => { dBonusDef[u] = fSchild; });
 
   const wallLevel = Math.min(20, num('d-steinmauer'));
   const wallBonus = wallLevel * 100;
