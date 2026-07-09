@@ -236,7 +236,7 @@
             <div class="resource-input-label"><span>🏹</span> <span data-i18n="forschungBogen">Bogen-Stufe (+3 Bogenschütze-Angriff/Stufe)</span></div>
             <input type="number" id="a-forschung-bogen" min="0" max="10" value="0" inputmode="numeric">
           </div>
-          <div class="building-benefit" data-i18n="forschungHintAtk">Stufe 0–10, siehe Forschungsmenü. Speer und Bogen bestätigt anhand Militär-Übersicht (+2 bzw. +3 pro Stufe). Katapult-Angriff kann nicht durch Forschung verstärkt werden — nur "Schild" wirkt auf das Katapult (Verteidigung).</div>
+          <div class="building-benefit" data-i18n="forschungHintAtk">Speer und Bogen anhand Militär-Übersicht bestätigt (+2 bzw. +3 Angriff/Stufe, max. Stufe 10). Katapult-Angriff kann nicht erforscht werden — auf das Katapult wirkt nur der Schild-Bonus des Verteidigers. Kampf-Forschung wirkt nur auf Landtruppen-Angriff, nicht auf Schiffs-Angriff.</div>
         </div>
 
 
@@ -420,13 +420,13 @@
             <span class="building-card-name" data-i18n="forschung">🔬 Forschung</span>
           </div>
           <div class="building-card-cost" style="padding:6px 10px 0;">
-            <span class="text-muted" style="font-size:0.82rem;" data-i18n="forschungDescDef">Schild wirkt gleichmäßig auf die Verteidigung aller Einheiten.</span>
+            <span class="text-muted" style="font-size:0.82rem;" data-i18n="forschungDescDef">Schild wirkt gleichmäßig auf die Verteidigung aller Landeinheiten (Steinwerfer, Speerträger, Bogenschütze, Katapult) — nicht auf Schiffe.</span>
           </div>
           <div class="resource-input-row">
-            <div class="resource-input-label"><span>🛡️</span> <span data-i18n="forschungSchild">Schild-Stufe (+2 Verteidigung aller Einheiten/Stufe)</span></div>
+            <div class="resource-input-label"><span>🛡️</span> <span data-i18n="forschungSchild">Schild-Stufe (+2 Verteidigung aller Landeinheiten/Stufe)</span></div>
             <input type="number" id="d-forschung-schild" min="0" max="10" value="0" inputmode="numeric">
           </div>
-          <div class="building-benefit" data-i18n="forschungHintDef">Stufe 0–10, siehe Forschungsmenü. Bestätigt anhand Militär-Übersicht (20 bei Stufe 10 = +2/Stufe).</div>
+          <div class="building-benefit" data-i18n="forschungHintDef">Stufe 0–10, siehe Forschungsmenü. Anhand Militär-Übersicht bestätigt (+2 Verteidigung/Stufe, max. 20 bei Stufe 10). Wirkt nicht auf Schiffe.</div>
         </div>
 
         <!-- Steinmauer -->
