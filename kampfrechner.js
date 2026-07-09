@@ -24,6 +24,8 @@ const T = {
     result:            '📊 Kampfergebnis (nach Phasen)',
     footerText:        'Kampfinsel Kampfrechner · Inoffizielles Tool',
     handbook:          'Handbuch',
+    resetButton:       '↺ Zurücksetzen',
+    resetConfirm:      'Alle eingegebenen Werte zurücksetzen?',
     'unit-steinwerfer':          '🪨 Steinwerfer',
     'unit-speertreaeger':        '🗡️ Speerträger',
     'unit-bogenschuetze':        '🏹 Bogenschütze',
@@ -139,6 +141,8 @@ const T = {
     result:            '📊 Battle Result (by phase)',
     footerText:        'Kampfinsel Battle Calculator · Unofficial Tool',
     handbook:          'Handbook',
+    resetButton:       '↺ Reset',
+    resetConfirm:      'Reset all entered values?',
     'unit-steinwerfer':          '🪨 Stone Thrower',
     'unit-speertreaeger':        '🗡️ Spearman',
     'unit-bogenschuetze':        '🏹 Archer',
@@ -609,7 +613,7 @@ function renderUnitsNeeded(t, deficit, aBonusAtk, unitDefs, context) {
 }
 
 /* ─── Init ─── */
-document.querySelectorAll('.lang-btn').forEach(btn => {
+document.querySelectorAll('.lang-btn[data-lang]').forEach(btn => {
   btn.addEventListener('click', () => setLang(btn.dataset.lang));
 });
 
@@ -620,6 +624,14 @@ document.querySelectorAll('input[type="number"]').forEach(el => {
     if (el.max !== '' && Number(el.value) > Number(el.max)) el.value = el.max;
     calculate();
   });
+});
+
+$$('reset-btn').addEventListener('click', () => {
+  if (!confirm(T[lang].resetConfirm)) return;
+  document.querySelectorAll('input[type="number"]').forEach(el => {
+    el.value = el.defaultValue || 0;
+  });
+  calculate();
 });
 
 setLang(lang);
