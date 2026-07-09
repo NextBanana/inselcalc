@@ -34,13 +34,13 @@ const T = {
     'unit-ghs':                  '🛥️ Gr. Handelsschiff',
     'unit-kolonisierungsschiff': '⛴️ Kolonisierungsschiff',
     forschung:                   '🔬 Forschung',
-    forschungDescAtk:            'Wirkt automatisch auf die passende Einheit.',
-    forschungSpeer:              'Speer (+Speerträger-Angriff)',
-    forschungBogen:              'Bogen (+Bogenschütze-Angriff)',
-    forschungHintAtk:            'Werte pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "35 (15+20)" → hier 20 eintragen.',
-    forschungDescDef:            'Schild wirkt gleichmäßig auf die Verteidigung aller Einheiten.',
-    forschungSchild:             'Schild (+Verteidigung aller Einheiten)',
-    forschungHintDef:            'Wert pro Einheit (nicht Level) — z. B. aus Militär-Übersicht ablesen: "28 (8+20)" → hier 20 eintragen.',
+    forschungDescAtk:            'Stufe eintragen (0–10) — wirkt automatisch auf die passende Einheit.',
+    forschungSpeer:              'Speer-Stufe (+2 Speerträger-Angriff/Stufe)',
+    forschungBogen:              'Bogen-Stufe (+3 Bogenschütze-Angriff/Stufe)',
+    forschungHintAtk:            'Speer und Bogen anhand Militär-Übersicht bestätigt (+2 bzw. +3 Angriff/Stufe, max. Stufe 10). Katapult-Angriff kann nicht erforscht werden — auf das Katapult wirkt nur der Schild-Bonus des Verteidigers. Kampf-Forschung wirkt nur auf Landtruppen-Angriff, nicht auf Schiffs-Angriff.',
+    forschungDescDef:            'Schild wirkt gleichmäßig auf die Verteidigung aller Landeinheiten (Steinwerfer, Speerträger, Bogenschütze, Katapult) — nicht auf Schiffe.',
+    forschungSchild:             'Schild-Stufe (+2 Verteidigung aller Landeinheiten/Stufe)',
+    forschungHintDef:            'Stufe 0–10, siehe Forschungsmenü. Anhand Militär-Übersicht bestätigt (+2 Verteidigung/Stufe, max. 20 bei Stufe 10). Wirkt nicht auf Schiffe.',
     steinmauer:                  '🧱 Steinmauer',
     steinmauerLevel:             'Stufe',
     steinmauerBonus:             def => `+${def} Verteidigung`,
@@ -149,13 +149,13 @@ const T = {
     'unit-ghs':                  '🛥️ Lg. Merchant',
     'unit-kolonisierungsschiff': '⛴️ Colonization Ship',
     forschung:                   '🔬 Research',
-    forschungDescAtk:            'Applies automatically to the matching unit.',
-    forschungSpeer:              'Spear (+Spearman attack)',
-    forschungBogen:              'Bow (+Archer attack)',
-    forschungHintAtk:            'Value per unit (not level) — e.g. read from the Military overview: "35 (15+20)" → enter 20 here.',
-    forschungDescDef:            'Shield applies evenly to the defence of all units.',
-    forschungSchild:             'Shield (+Defence of all units)',
-    forschungHintDef:            'Value per unit (not level) — e.g. read from the Military overview: "28 (8+20)" → enter 20 here.',
+    forschungDescAtk:            'Enter a level (0–10) — applies automatically to the matching unit.',
+    forschungSpeer:              'Spear level (+2 Spearman attack/level)',
+    forschungBogen:              'Bow level (+3 Archer attack/level)',
+    forschungHintAtk:            'Spear and Bow confirmed against the Military overview (+2 / +3 attack per level, max level 10). Catapult attack cannot be researched — only the defender\'s Shield bonus affects the catapult. Combat research only affects land troop attack, not ship attack.',
+    forschungDescDef:            'Shield applies evenly to the defence of all land units (Stone Thrower, Spearman, Archer, Catapult) — not to ships.',
+    forschungSchild:             'Shield level (+2 defence of all land units/level)',
+    forschungHintDef:            'Level 0–10, see the research menu. Confirmed against the Military overview (+2 defence/level, max 20 at level 10). Does not affect ships.',
     steinmauer:                  '🧱 Stone Wall',
     steinmauerLevel:             'Level',
     steinmauerBonus:             def => `+${def} Defence`,
@@ -323,7 +323,8 @@ function calculate() {
   aBonusAtk.bogenschuetze = fBogen;
 
   const dBonusDef = {};
-  ALL.forEach(u => { dBonusDef[u] = fSchild; });
+  ALL.forEach(u => { dBonusDef[u] = 0; });
+  GROUND.forEach(u => { dBonusDef[u] = fSchild; }); // Schild wirkt nur auf Landeinheiten
 
   const wallLevel = Math.min(20, num('d-steinmauer'));
   const wallBonus = wallLevel * 100;
