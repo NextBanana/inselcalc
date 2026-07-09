@@ -19,7 +19,11 @@
 <div class="page-layout">
   <main class="container">
 
-    <h1 data-i18n="h1">Kampfrechner</h1>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+      <h1 data-i18n="h1" style="margin-bottom:0; border-bottom:none; padding-bottom:0;">Kampfrechner</h1>
+      <button type="button" id="reset-btn" class="lang-btn" data-i18n="resetButton">↺ Zurücksetzen</button>
+    </div>
+    <div style="height:1px; background:var(--c-card-border); margin-bottom:12px;"></div>
 
     <!-- ── Live Summary ── -->
     <div class="resources-bar" id="summary-bar">
