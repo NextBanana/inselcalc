@@ -57,7 +57,7 @@ const T = {
     haupthaus:                   '🏛️ Haupthaus',
     haupthausDesc:               'Basis-Wert für Landkampf (Phase 3)',
     basisLabel:                  'Basis-Wert',
-    basisHint:                   'Wert unbekannt/geschätzt eintragen — genaue Formel (Haupthaus-Level → Basis) ist derzeit nicht bekannt.',
+    basisHint:                   'Standardwert 500 (Basis-Verteidigung des Haupthauses). Bei Bedarf anpassen, z. B. falls das Haupthaus-Level abweicht.',
     // dynamic
     troops:     n => `${n} Truppen`,
     slotsFree:  n => `${n} Plätze frei`,
@@ -174,7 +174,7 @@ const T = {
     haupthaus:                   '🏛️ Town Hall',
     haupthausDesc:               'Base value for land combat (Phase 3)',
     basisLabel:                  'Base value',
-    basisHint:                   'Enter a known/estimated value — the exact town hall level → base formula is not yet known.',
+    basisHint:                   'Default value 500 (town hall base defence). Adjust if needed, e.g. if the town hall level differs.',
     // dynamic
     troops:     n => `${n} troops`,
     slotsFree:  n => `${n} slots free`,
