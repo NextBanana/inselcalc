@@ -1,9 +1,6 @@
 # ⚔️ Kampfinsel Kampfrechner
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/m0kk4/kampfinsel-calculator?style=social)](https://github.com/m0kk4/kampfinsel-calculator/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/m0kk4/kampfinsel-calculator?style=social)](https://github.com/m0kk4/kampfinsel-calculator/network/members)
-[![GitHub Issues](https://img.shields.io/github/issues/m0kk4/kampfinsel-calculator)](https://github.com/m0kk4/kampfinsel-calculator/issues)
 
 > **Inoffizielles Tool** — Dieses Projekt steht in keiner Verbindung zum Kampfinsel-Team.
 
