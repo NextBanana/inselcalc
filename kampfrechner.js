@@ -330,6 +330,25 @@ function calculate() {
   ALL.forEach(u => { dBonusDef[u] = 0; });
   GROUND.forEach(u => { dBonusDef[u] = fSchild; }); // Schild wirkt nur auf Landeinheiten
 
+  /* Angezeigte Basiswerte unter den Einheiten live an die Forschung anpassen
+     (z. B. "⚔ 35 (15+20)"), damit der Nutzer den aktuellen Wert sieht. */
+  ALL.forEach(u => {
+    const atkEl = $$(`a-${u}-atk-stat`);
+    if (atkEl) {
+      const bonus = aBonusAtk[u] || 0;
+      atkEl.textContent = bonus > 0
+        ? `⚔ ${UNITS[u].atk + bonus} (${UNITS[u].atk}+${bonus})`
+        : `⚔ ${UNITS[u].atk}`;
+    }
+    const defEl = $$(`d-${u}-def-stat`);
+    if (defEl) {
+      const bonus = dBonusDef[u] || 0;
+      defEl.textContent = bonus > 0
+        ? `🛡 ${UNITS[u].def + bonus} (${UNITS[u].def}+${bonus})`
+        : `🛡 ${UNITS[u].def}`;
+    }
+  });
+
   const wallLevel = Math.min(20, num('d-steinmauer'));
   const wallBonus = wallLevel * 100;
 
